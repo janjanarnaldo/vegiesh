@@ -1,0 +1,11 @@
+// Clients
+export const FETCHING_CLIENTS_SUCCESS = 'FETCHING_CLIENTS_SUCCESS';
+
+// Navigation
+export const SET_TAB = 'SET_TAB'
+
+export const NAVIGATION_FORWARD = 'NAVIGATION_FORWARD'
+export const NAVIGATION_BACK = 'NAVIGATION_BACK'
+
+// sample
+export const FETCHING_JEDI_SUCCESS = 'FETCHING_JEDI_SUCCESS';
