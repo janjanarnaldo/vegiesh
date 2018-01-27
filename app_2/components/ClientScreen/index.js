@@ -41,7 +41,43 @@ class ClientScreen extends React.Component {
 
   render() {
     return (
-      <Text>test</Text>
+      <View style={styles.homeContainer}>
+        <Image source={require('../../images/broccoli.png')} style={styles.logo} />
+        <View style={styles.quickSearch}>
+          <TextInput 
+            onChangeText={(inputText) => this.setState({inputText})}
+            placeholder="Quick Search"
+            style={styles.quickSearchText}>
+          </TextInput>
+          <TouchableHighlight 
+            onPress={() => this.searchClients()}
+            style={styles.quickSearchSubmit}
+            underlayColor='white'>
+            <Text>Submit</Text>
+          </TouchableHighlight>
+        </View>
+        <ScrollView contentContainerStyle={styles.scrollContainer} showsVerticalScrollIndicator={false}>
+          <View style={styles.scrollContent}>
+            {!this.state.isFetching && this.clients().map((client, key) => {
+              return (
+                <View style={styles.client} key={key} onPress={this.clientDetails}>
+                  <View style={{flex: 0.5}}>
+                    <Text style={styles.clientTitle}>Name</Text>
+                    <Text style={styles.clientName}>{client.name ? client.name : `No Name`}</Text>
+                  </View>
+                  <View style={{flex: 0.5}}>
+                    <Text style={styles.clientTitle}>Current Balance</Text>
+                    <Text style={styles.clientName}>Php {client.balance ? client.balance : `0.00`}</Text>
+                  </View>
+                </View>
+              )
+            })}
+            {this.state.isFetching ? <View style={styles.loader}>
+              <ActivityIndicator size="large" color="#00ff00" />
+            </View> : null}
+          </View>
+        </ScrollView>
+      </View>
     );
   }
 }
