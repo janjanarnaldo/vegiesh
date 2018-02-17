@@ -29,18 +29,6 @@ const App = () => (
   </Provider>
 )
 
-// class App extends React.Component {
-//   store = createStore(AppReducer);
-
-//   render() {
-//     return (
-//       <Provider store={this.store}>
-//         <AppWithNavigationState />
-//       </Provider>
-//     );
-//   }
-// }
-
 AppRegistry.registerComponent('vegiesh', () => App);
 
 export default App;

@@ -1,8 +1,10 @@
 import React from 'react';
+import ImageHeader from '../Common/ImageHeader';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { ActionCreators } from '../../actions';
 import TimerMixin from 'react-timer-mixin';
+import { generalStyle, colors } from '../../lib/styles';
 import {
   View,
   Text,
@@ -12,27 +14,43 @@ import {
   StyleSheet,
   ScrollView,
   ActivityIndicator,
+  TouchableWithoutFeedback,
+  Animated,
 } from 'react-native';
 
 class ClientScreen extends React.Component {
   constructor(props) {
     super(props);
-    this.state = ({inputText: '', isFetching: false});
+    this.state = ({isFetching: false, textError: false});
+  }
+
+  setSearchText(searchText) {
+    this.props.setSearchText(searchText);
   }
 
   searchClients() {
-    // this.setState({isFetching: true});
-
-    // this.props.fetchClients(this.state.inputText);
-    // this.setState({isFetching: false});
+    if (!this.props.searchText) {
+      this.setState({textError: true});
+      return;
+    }
+    this.setState({isFetching: true});
+    this.props.fetchClients(this.props.searchText);
+    this.setState({isFetching: false});
     // uncomment when api is ready
-    // this.props.fetchClients(this.state.inputText).then(() => {
+    // this.props.fetchClients(this.props.searchText).then(() => {
     //   this.setState({isFetching: false});
     // });
   }
 
-  clientDetails() {
-    
+  componentDidMount() {
+    if (this.props.searchText) {
+      this.searchClients();
+    }
+  }
+
+  clientDetails(id) {
+    this.props.clientDetails(id);
+    this.props.goToClientDetails();
   }
 
   clients() {
@@ -41,13 +59,17 @@ class ClientScreen extends React.Component {
 
   render() {
     return (
-      <View style={styles.homeContainer}>
-        <Image source={require('../../images/broccoli.png')} style={styles.logo} />
+      <View style={generalStyle.homeContainer}>
+        <ImageHeader/>
         <View style={styles.quickSearch}>
           <TextInput 
-            onChangeText={(inputText) => this.setState({inputText})}
+            onChangeText={(searchText) => this.setSearchText(searchText)}
             placeholder="Quick Search"
-            style={styles.quickSearchText}>
+            style={styles.quickSearchText}
+            placeholderTextColor={this.state.textError ? 'red' : 'gray'}
+            onFocus={() => this.setState({textError: false})}
+            value={this.props.searchText}
+          >
           </TextInput>
           <TouchableHighlight 
             onPress={() => this.searchClients()}
@@ -60,16 +82,18 @@ class ClientScreen extends React.Component {
           <View style={styles.scrollContent}>
             {!this.state.isFetching && this.clients().map((client, key) => {
               return (
-                <View style={styles.client} key={key} onPress={this.clientDetails}>
-                  <View style={{flex: 0.5}}>
-                    <Text style={styles.clientTitle}>Name</Text>
-                    <Text style={styles.clientName}>{client.name ? client.name : `No Name`}</Text>
-                  </View>
-                  <View style={{flex: 0.5}}>
-                    <Text style={styles.clientTitle}>Current Balance</Text>
-                    <Text style={styles.clientName}>Php {client.balance ? client.balance : `0.00`}</Text>
-                  </View>
-                </View>
+                <TouchableWithoutFeedback key={key} onPressIn={() => this.clientDetails(client.id)}>
+                  <Animated.View style={styles.client} >
+                    <View style={{flex: 0.5}}>
+                      <Text style={styles.clientTitle}>Name</Text>
+                      <Text style={styles.clientName}>{client.name ? client.name : `No Name`}</Text>
+                    </View>
+                    <View style={{flex: 0.5}}>
+                      <Text style={styles.clientTitle}>Current Balance</Text>
+                      <Text style={styles.clientName}>Php {client.balance ? client.balance : `0.00`}</Text>
+                    </View>
+                  </Animated.View>
+                </TouchableWithoutFeedback>
               )
             })}
             {this.state.isFetching ? <View style={styles.loader}>
@@ -85,13 +109,8 @@ class ClientScreen extends React.Component {
 const styles = StyleSheet.create({
   homeContainer: {
     padding: 10,
-    paddingTop: 0,
+    paddingTop: 10,
     flex: 1,
-  },
-  logo: {
-    alignSelf: 'center',
-    width: 50,
-    height: 50,
   },
   quickSearch: {
     flexDirection: 'row',
@@ -120,14 +139,13 @@ const styles = StyleSheet.create({
   },
   client: {
     borderRadius: 50,
-    // backgroundColor: '#fff',
     marginBottom: 10,
     paddingHorizontal: 20,
     paddingVertical: 10,
     flex: 1,
     flexDirection: 'row',
     elevation: 7,
-    backgroundColor: 'rgb(0, 157, 220)',
+    backgroundColor: colors.vgBlue,
     opacity: 0.5
   },
   clientTitle: {
@@ -147,17 +165,17 @@ const styles = StyleSheet.create({
 });
 
 ClientScreen.navigationOptions = {
-  title: 'Home Screen',
+  title: 'Clients',
 };
 
-function mapDispatchToProps(dispatch) {
-  return bindActionCreators(ActionCreators, dispatch);
-}
+const mapDispatchToProps = (dispatch) => bindActionCreators(ActionCreators, dispatch);
 
-function mapStateToProps(state) {
-  return {
-    searchedClients: state.searchedClients,
-  };
-}
+const mapStateToProps = (state) => ({
+  searchText: state.searchText,
+  setSearchText: state.setSearchText,
+  searchedClients: state.searchedClients,
+  fetchClients: state.fetchClients,
+  goToClientDetails: state.goToClientDetails,
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(ClientScreen);

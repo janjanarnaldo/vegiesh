@@ -6,15 +6,17 @@ import { addNavigationHelpers, StackNavigator } from 'react-navigation';
 import LoginScreen from '../components/LoginScreen';
 import MainScreen from '../components/MainScreen';
 import ClientScreen from '../components/ClientScreen';
+import ClientDetailScreen from '../components/ClientScreen/Detail';
 
 export const AppNavigator = StackNavigator({
   Login: { screen: LoginScreen },
   Main: { screen: MainScreen },
   Client: { screen: ClientScreen },
+  ClientDetail: { screen: ClientDetailScreen },
 });
 
 const AppWithNavigationState = ({ dispatch, nav }) => (
-  <AppNavigator navigation={addNavigationHelpers({ dispatch, state: nav })} />
+  <AppNavigator navigation={addNavigationHelpers({ dispatch, state: nav })}/>
 );
 
 AppWithNavigationState.propTypes = {

@@ -1,5 +1,9 @@
 // Clients
+export const SET_SEARCH_TEXT = 'SET_SEARCH_TEXT';
 export const FETCHING_CLIENTS_SUCCESS = 'FETCHING_CLIENTS_SUCCESS';
+export const FETCHING_CLIENT_DETAIL_SUCCESS = 'FETCHING_CLIENT_DETAIL_SUCCESS';
+export const UPDATE_CLIENT_DETAIL = 'UPDATE_CLIENT_DETAIL';
+export const SAVE_CLIENT_DETAIL = 'SAVE_CLIENT_DETAIL';
 
 // Navigation
 export const SET_TAB = 'SET_TAB'
@@ -9,3 +13,7 @@ export const NAVIGATION_BACK = 'NAVIGATION_BACK'
 
 // sample
 export const FETCHING_JEDI_SUCCESS = 'FETCHING_JEDI_SUCCESS';
+
+// auth
+export const AUTH_IS_LOGIN = 'Login';
+export const AUTH_IS_LOGOUT = 'Logout';

@@ -3,10 +3,8 @@ import { nav } from './nav';
 import { auth } from './auth';
 import * as clientsReducer from './clients';
 
-const AppReducer = combineReducers({
+export default combineReducers({
   nav,
   auth,
-  clientsReducer
+  ...clientsReducer
 });
-
-export default AppReducer;
