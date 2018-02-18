@@ -23,16 +23,16 @@ class Detail extends React.Component {
   }
 
   saveClientDetail() {
-    this.setState({isSaving: true});
     // uncomment when api is ready
-    // this.props.saveClientDetail(this.props.clientDetail).then(() => {
-    //   this.setState({isSaving: false});
-    //   this.props.goToClient();
-    // });
+    // this.setState({isSaving: true});
+    this.props.saveClientDetail(this.props.clientDetail).then(() => {
+      this.setState({isSaving: false});
+      this.props.goToClient();
+    });
 
-    this.props.saveClientDetail(this.props.clientDetail);
-    this.setState({isSaving: false});
-    this.props.goToClient();
+    // this.props.saveClientDetail(this.props.clientDetail);
+    // this.setState({isSaving: false});
+    // this.props.goToClient();
   }
 
   render() {

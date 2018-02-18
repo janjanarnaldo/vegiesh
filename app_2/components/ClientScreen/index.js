@@ -48,9 +48,10 @@ class ClientScreen extends React.Component {
     }
   }
 
-  clientDetails(id) {
-    this.props.clientDetails(id);
-    this.props.goToClientDetails();
+  clientDetails(_id) {
+    this.props.clientDetails(_id).then(() => {
+      this.props.goToClientDetails();
+    });
   }
 
   clients() {
@@ -82,7 +83,7 @@ class ClientScreen extends React.Component {
           <View style={styles.scrollContent}>
             {!this.state.isFetching && this.clients().map((client, key) => {
               return (
-                <TouchableWithoutFeedback key={key} onPressIn={() => this.clientDetails(client.id)}>
+                <TouchableWithoutFeedback key={key} onPressIn={() => this.clientDetails(client._id)}>
                   <Animated.View style={styles.client} >
                     <View style={{flex: 0.5}}>
                       <Text style={styles.clientTitle}>Name</Text>
@@ -142,7 +143,6 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     paddingHorizontal: 20,
     paddingVertical: 10,
-    flex: 1,
     flexDirection: 'row',
     elevation: 7,
     backgroundColor: colors.vgBlue,
